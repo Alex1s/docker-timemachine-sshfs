@@ -10,6 +10,7 @@ CUSTOM_SMB_CONF="${CUSTOM_SMB_CONF:-false}"
 CUSTOM_SMB_PROTO="${CUSTOM_SMB_PROTO:-SMB2}"
 SMB_PORT="${SMB_PORT:-445}"
 CUSTOM_USER="${CUSTOM_USER:-false}"
+SMBD_ONLY="${SMBD_ONLY:-false}"
 TM_USERNAME="${TM_USERNAME:-timemachine}"
 TM_GROUPNAME="${TM_GROUPNAME:-timemachine}"
 VOLUME_SIZE_LIMIT="${VOLUME_SIZE_LIMIT:-0}"
@@ -504,6 +505,14 @@ do
       ;;
   esac
 done
+
+if [ "${SMBD_ONLY}" = "true" ]
+then
+  echo INFO: disabling nmbd, dbus and avahi so that only smbd runs
+  touch /etc/s6/nmbd/down
+  touch /etc/s6/dbus/down
+  touch /etc/s6/avahi/down
+fi
 
 # run CMD
 echo "INFO: entrypoint complete; executing '${*}'"

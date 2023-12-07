@@ -218,6 +218,7 @@ If you change the `TM_USERNAME` value, it will change the persistent data path f
 | `SMB_VFS_OBJECTS` | `acl_xattr fruit streams_xattr` | value of `vfs objects` |
 | `VOLUME_SIZE_LIMIT` | `0` | sets the maximum size of the time machine backup; a unit can also be passed (e.g. - `1 T`). See the [Samba docs](https://www.samba.org/samba/docs/current/man-html/vfs_fruit.8.html) under the `fruit:time machine max size` section for more details |
 | `WORKGROUP` | `WORKGROUP` | set the Samba workgroup name |
+| `SMBD_ONLY` | `false` | If this is set to `true` the container will NOT run nmbd, dbus and avahi and thus ONLY run smbd. Can be used if e.g. only the `445` port is being exposed and thus the other services are not needed. |
 
 ### Adding Multiple Users & Shares
 
