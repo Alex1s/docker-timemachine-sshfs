@@ -240,7 +240,7 @@ then
    smb ports = ${SMB_PORT}
    workgroup = ${WORKGROUP}
    vfs objects = ${SMB_VFS_OBJECTS}
-   streams_xattr:prefix= ${SMB_STREAMS_XATTR_PREFIX}
+   streams_xattr:prefix = ${SMB_STREAMS_XATTR_PREFIX}
    streams_xattr:store_stream_type = ${SMB_STREAMS_XATTR_STORE_STREAM_TYPE}
    fruit:aapl = yes
    fruit:nfs_aces = ${SMB_NFS_ACES}
