@@ -22,6 +22,8 @@ SMB_INHERIT_PERMISSIONS="${SMB_INHERIT_PERMISSIONS:-no}"
 SMB_NFS_ACES="${SMB_NFS_ACES:-no}"
 SMB_METADATA="${SMB_METADATA:-stream}"
 IGNORE_DOS_ATTRIBUTES="${CUSTOM_USER:-false}"
+SMB_STREAMS_XATTR_PREFIX="${SMB_STREAMS_XATTR_PREFIX:-user.DosStream.}"
+SMB_STREAMS_XATTR_STORE_STREAM_TYPE="${SMB_STREAMS_XATTR_STORE_STREAM_TYPE:-yes}"
 
 # support both PUID/TM_UID and PGID/TM_GID
 PUID="${PUID:-1000}"
@@ -238,6 +240,8 @@ then
    smb ports = ${SMB_PORT}
    workgroup = ${WORKGROUP}
    vfs objects = ${SMB_VFS_OBJECTS}
+   streams_xattr:prefix= ${SMB_STREAMS_XATTR_PREFIX}
+   streams_xattr:=store_stream_type ${SMB_STREAMS_XATTR_STORE_STREAM_TYPE}
    fruit:aapl = yes
    fruit:nfs_aces = ${SMB_NFS_ACES}
    fruit:model = ${MIMIC_MODEL}
