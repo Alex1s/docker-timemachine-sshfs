@@ -1,9 +1,29 @@
-# rebased/repackaged base image that only updates existing packages
-FROM mbentley/alpine:latest
+# the version of alpine needs to be changed three times if you plan to update this Dockerfile
+# two times in the FROM statement
+# one time the ARG named ALPINE_GIT_VERSION
+
+FROM alpine:3.19
+ARG ALPINE_GIT_VERSION=3.19
+RUN apk --no-cache add git alpine-sdk && \
+    echo '#!/bin/sh\nexec "$@"' | sed 's/\\n/\n/g' | tee /usr/bin/sudo >/dev/null && chmod +x /usr/bin/sudo && \
+    abuild-keygen -n -a -i && \
+    git clone --single-branch --branch $ALPINE_GIT_VERSION-stable https://git.alpinelinux.org/aports /root/aports && \
+    cd /root/aports/main/samba && \
+    sed -i 's/configure \\/configure \\\n\t\t--without-acl-support \\/g' APKBUILD && \
+    apk update && \
+    abuild -F checksum && \
+    abuild -F -r && \
+    cd / && \
+    rm -rf /root/aports
+
+
+FROM alpine:3.19
 LABEL maintainer="Matt Bentley <mbentley@mbentley.net>"
 
+COPY --from=0 /root/packages /root/packages
+RUN cd /root/packages/main/x86_64 && find . -maxdepth 1 -name '*.apk' -print0 | xargs -0 apk add --allow-untrusted && cd / && rm -rf /root/packages
 # install samba and s6; create supporting directories
-RUN apk add --no-cache attr avahi avahi-compat-libdns_sd avahi-tools dbus samba-common-tools s6 samba-server &&\
+RUN apk add --no-cache attr avahi avahi-compat-libdns_sd avahi-tools dbus s6 &&\
   touch /etc/samba/lmhosts &&\
   rm /etc/samba/smb.conf &&\
   rm /etc/avahi/services/*.service &&\
@@ -12,8 +32,6 @@ RUN apk add --no-cache attr avahi avahi-compat-libdns_sd avahi-tools dbus samba-
 # copy in necessary supporting config files
 COPY s6 /etc/s6
 COPY entrypoint.sh /
-
-VOLUME ["/var/lib/samba","/var/cache/samba","/run/samba"]
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["s6-svscan","/etc/s6"]
