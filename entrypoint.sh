@@ -20,6 +20,9 @@ SMB_VFS_OBJECTS="${SMB_VFS_OBJECTS:-acl_xattr fruit streams_xattr}"
 SMB_INHERIT_PERMISSIONS="${SMB_INHERIT_PERMISSIONS:-no}"
 SMB_NFS_ACES="${SMB_NFS_ACES:-no}"
 SMB_METADATA="${SMB_METADATA:-stream}"
+SMB_ACL_XATTR_SECURITY_ACL_NAME="${SMB_ACL_XATTR_SECURITY_ACL_NAME:-security.NTACL}"
+SMB_ACL_XATTR_IGNORE_SYSTEM_ACLS="${SMB_ACL_XATTR_IGNORE_SYSTEM_ACLS:-no}"
+SMB_ACL_XATTR_DEFAULT_ACL_STYLE="${SMB_ACL_XATTR_DEFAULT_ACL_STYLE:-posix}"
 
 # support both PUID/TM_UID and PGID/TM_GID
 PUID="${PUID:-1000}"
@@ -236,6 +239,9 @@ then
    smb ports = ${SMB_PORT}
    workgroup = ${WORKGROUP}
    vfs objects = ${SMB_VFS_OBJECTS}
+   acl_xattr:security_acl_name = ${SMB_ACL_XATTR_SECURITY_ACL_NAME}
+   acl_xattr:ignore system acls = ${SMB_ACL_XATTR_IGNORE_SYSTEM_ACLS}
+   acl_xattr:default acl style = ${SMB_ACL_XATTR_DEFAULT_ACL_STYLE}
    fruit:aapl = yes
    fruit:nfs_aces = ${SMB_NFS_ACES}
    fruit:model = ${MIMIC_MODEL}
