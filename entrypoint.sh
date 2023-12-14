@@ -10,6 +10,7 @@ CUSTOM_SMB_CONF="${CUSTOM_SMB_CONF:-false}"
 CUSTOM_SMB_PROTO="${CUSTOM_SMB_PROTO:-SMB2}"
 SMB_PORT="${SMB_PORT:-445}"
 CUSTOM_USER="${CUSTOM_USER:-false}"
+SMBD_ONLY="${SMBD_ONLY:-false}"
 TM_USERNAME="${TM_USERNAME:-timemachine}"
 TM_GROUPNAME="${TM_GROUPNAME:-timemachine}"
 VOLUME_SIZE_LIMIT="${VOLUME_SIZE_LIMIT:-0}"
@@ -21,6 +22,8 @@ SMB_INHERIT_PERMISSIONS="${SMB_INHERIT_PERMISSIONS:-no}"
 SMB_NFS_ACES="${SMB_NFS_ACES:-no}"
 SMB_METADATA="${SMB_METADATA:-stream}"
 IGNORE_DOS_ATTRIBUTES="${IGNORE_DOS_ATTRIBUTES:-false}"
+SMB_STREAMS_XATTR_PREFIX="${SMB_STREAMS_XATTR_PREFIX:-user.DosStream.}"
+SMB_STREAMS_XATTR_STORE_STREAM_TYPE="${SMB_STREAMS_XATTR_STORE_STREAM_TYPE:-yes}"
 
 # support both PUID/TM_UID and PGID/TM_GID
 PUID="${PUID:-1000}"
@@ -237,6 +240,8 @@ then
    smb ports = ${SMB_PORT}
    workgroup = ${WORKGROUP}
    vfs objects = ${SMB_VFS_OBJECTS}
+   streams_xattr:prefix = ${SMB_STREAMS_XATTR_PREFIX}
+   streams_xattr:store_stream_type = ${SMB_STREAMS_XATTR_STORE_STREAM_TYPE}
    fruit:aapl = yes
    fruit:nfs_aces = ${SMB_NFS_ACES}
    fruit:model = ${MIMIC_MODEL}
@@ -513,6 +518,14 @@ do
       ;;
   esac
 done
+
+if [ "${SMBD_ONLY}" = "true" ]
+then
+  echo INFO: disabling nmbd, dbus and avahi so that only smbd runs
+  touch /etc/s6/nmbd/down
+  touch /etc/s6/dbus/down
+  touch /etc/s6/avahi/down
+fi
 
 # run CMD
 echo "INFO: entrypoint complete; executing '${*}'"
