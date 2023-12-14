@@ -24,6 +24,9 @@ SMB_METADATA="${SMB_METADATA:-stream}"
 IGNORE_DOS_ATTRIBUTES="${IGNORE_DOS_ATTRIBUTES:-false}"
 SMB_STREAMS_XATTR_PREFIX="${SMB_STREAMS_XATTR_PREFIX:-user.DosStream.}"
 SMB_STREAMS_XATTR_STORE_STREAM_TYPE="${SMB_STREAMS_XATTR_STORE_STREAM_TYPE:-yes}"
+SMB_ACL_XATTR_SECURITY_ACL_NAME="${SMB_ACL_XATTR_SECURITY_ACL_NAME:-security.NTACL}"
+SMB_ACL_XATTR_IGNORE_SYSTEM_ACLS="${SMB_ACL_XATTR_IGNORE_SYSTEM_ACLS:-no}"
+SMB_ACL_XATTR_DEFAULT_ACL_STYLE="${SMB_ACL_XATTR_DEFAULT_ACL_STYLE:-posix}"
 
 # support both PUID/TM_UID and PGID/TM_GID
 PUID="${PUID:-1000}"
@@ -242,6 +245,9 @@ then
    vfs objects = ${SMB_VFS_OBJECTS}
    streams_xattr:prefix = ${SMB_STREAMS_XATTR_PREFIX}
    streams_xattr:store_stream_type = ${SMB_STREAMS_XATTR_STORE_STREAM_TYPE}
+   acl_xattr:security_acl_name = ${SMB_ACL_XATTR_SECURITY_ACL_NAME}
+   acl_xattr:ignore system acls = ${SMB_ACL_XATTR_IGNORE_SYSTEM_ACLS}
+   acl_xattr:default acl style = ${SMB_ACL_XATTR_DEFAULT_ACL_STYLE}
    fruit:aapl = yes
    fruit:nfs_aces = ${SMB_NFS_ACES}
    fruit:model = ${MIMIC_MODEL}
