@@ -20,6 +20,7 @@ SMB_VFS_OBJECTS="${SMB_VFS_OBJECTS:-acl_xattr fruit streams_xattr}"
 SMB_INHERIT_PERMISSIONS="${SMB_INHERIT_PERMISSIONS:-no}"
 SMB_NFS_ACES="${SMB_NFS_ACES:-no}"
 SMB_METADATA="${SMB_METADATA:-stream}"
+SMB_STORE_DOS_ATTRIBUTES_NAME="${SMB_STORE_DOS_ATTRIBUTES_NAME:-user.DOSATTRIB}"
 
 # support both PUID/TM_UID and PGID/TM_GID
 PUID="${PUID:-1000}"
@@ -204,6 +205,8 @@ write_avahi_adisk_service() {
   echo "    <txt-record>dk${1}=adVN=${2},adVF=0x82</txt-record>" >> /etc/avahi/services/smbd.service
 }
 
+
+sed -i s/user.DOSATTRIB/"$SMB_STORE_DOS_ATTRIBUTES_NAME"/g /usr/lib/samba/libsmbd-base-samba4.so
 
 # check to see if the password should be set from a file (secret) or env var
 password_var_or_file
