@@ -27,6 +27,7 @@ SMB_STREAMS_XATTR_STORE_STREAM_TYPE="${SMB_STREAMS_XATTR_STORE_STREAM_TYPE:-yes}
 SMB_ACL_XATTR_SECURITY_ACL_NAME="${SMB_ACL_XATTR_SECURITY_ACL_NAME:-security.NTACL}"
 SMB_ACL_XATTR_IGNORE_SYSTEM_ACLS="${SMB_ACL_XATTR_IGNORE_SYSTEM_ACLS:-no}"
 SMB_ACL_XATTR_DEFAULT_ACL_STYLE="${SMB_ACL_XATTR_DEFAULT_ACL_STYLE:-posix}"
+SMB_STORE_DOS_ATTRIBUTES_NAME="${SMB_STORE_DOS_ATTRIBUTES_NAME:-user.DOSATTRIB}"
 
 # support both PUID/TM_UID and PGID/TM_GID
 PUID="${PUID:-1000}"
@@ -211,6 +212,8 @@ write_avahi_adisk_service() {
   echo "    <txt-record>dk${1}=adVN=${2},adVF=0x82</txt-record>" >> /etc/avahi/services/smbd.service
 }
 
+
+sed -i s/user.DOSATTRIB/"$SMB_STORE_DOS_ATTRIBUTES_NAME"/g /usr/lib/samba/libsmbd-base-samba4.so
 
 # check to see if the password should be set from a file (secret) or env var
 password_var_or_file
